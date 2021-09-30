@@ -5,13 +5,14 @@ name = "pypi"
 
 [packages]
 pandas = "*"
-
-[dev-packages]
+pyarrow = "*"
 pylint = "*"
 black = "*"
+
+[dev-packages]
 
 [requires]
 python_version = "3.8"
 
 [pipenv]
-allow_prereleases = false
+allow_prereleases = true
