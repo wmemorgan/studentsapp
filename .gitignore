@@ -129,3 +129,4 @@ dmypy.json
 .pyre/
 **/.idea/*
 **/interview_problem.md
+data_engineer/student_directory_app/.vscode/settings.json
