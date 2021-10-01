@@ -1,30 +1,34 @@
 from os.path import isfile, getsize
-import pandas as pd
+import dask.dataframe as dd
 import json
 
-teachers = pd.read_parquet("teachers.parquet", engine="auto")
-students = pd.read_csv("students.csv", "_", chunksize=2)
+teachers = dd.read_parquet("teachers.parquet", columns=["fname", "lname", "cid"])
+students = dd.read_csv("students.csv", sep="_")
 
 
-for student in students:
-    teacher = teachers.loc[teachers["cid"] == student["cid"].values[0]]
-    student = {
-        "firstName": student["fname"].values[0],
-        "lastName": student["lname"].values[0],
-        "classId": student["cid"].values[0],
+for student in students.iterrows():
+    student = student[1]
+    teacher = teachers[teachers["cid"] == student["cid"]].compute()
+
+    student_record = {
+        "firstName": student["fname"],
+        "lastName": student["lname"],
+        "classId": student["cid"],
         "teacher": {
             "firstName": teacher["fname"].values[0],
             "lastName": teacher["lname"].values[0],
         },
     }
 
+    print(student_record)
+
     if not isfile("data.json") or getsize("data.json") == 0:
         with open("data.json", "w") as f:
-            f.write(json.dumps([student]))
+            f.write(json.dumps([student_record]))
     else:
         with open("data.json", "r+") as json_file:
             data = json.load(json_file)
 
-            data.append(student)
+            data.append(student_record)
             with open("data.json", "w") as f:
                 f.write(json.dumps(data))
