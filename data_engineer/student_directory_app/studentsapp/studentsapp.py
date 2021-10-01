@@ -1,14 +1,17 @@
-def create_student_directory(students, teachers):
+from .helpers import create_json_file
+
+
+def create_student_directory(students, teachers, output_path):
     """Generates student directory"""
 
     for student in students.iterrows():
         student = student[1]
         teacher = teachers[teachers["cid"] == student["cid"]].compute()
 
-        print(_create_student_record(student, teacher))
+        create_json_file(_add_student_record(student, teacher), output_path)
 
 
-def _create_student_record(student, teacher):
+def _add_student_record(student, teacher):
     """Create student information record"""
 
     student_record = {
