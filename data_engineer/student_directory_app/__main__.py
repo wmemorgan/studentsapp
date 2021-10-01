@@ -1,10 +1,14 @@
-import dask.dataframe as dd
 from studentsapp.studentsapp import create_student_directory
+from studentsapp.helpers import transform_input_files
 
-teachers_data = "data/teachers.parquet"
-students_data = "data/students.csv"
-teachers_df = dd.read_parquet(teachers_data, columns=["fname", "lname", "cid"])
-students_df = dd.read_csv(students_data, sep="_").head(5)
-output_path = "data/students.json"
 
-create_student_directory(students_df, teachers_df, output_path)
+def main():
+    students_df, teachers_df = transform_input_files(
+        "data/students.csv", "data/teachers.parquet", ["fname", "lname", "cid"]
+    )
+
+    create_student_directory(students_df, teachers_df, "data/students.json")
+
+
+if __name__ == "__main__":
+    main()

@@ -1,5 +1,14 @@
 from os.path import isfile, getsize
+import dask.dataframe as dd
 import json
+
+
+def transform_input_files(students_file, teachers_files, columns=None):
+    """Convert source files to dataframes"""
+    students_df = dd.read_csv(students_file, sep="_").head(5)
+    teachers_df = dd.read_parquet(teachers_files, columns=columns)
+
+    return (students_df, teachers_df)
 
 
 def create_json_file(record, output_path):

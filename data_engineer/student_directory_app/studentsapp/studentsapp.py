@@ -8,10 +8,10 @@ def create_student_directory(students, teachers, output_path):
         student = student[1]
         teacher = teachers[teachers["cid"] == student["cid"]].compute()
 
-        create_json_file(_add_student_record(student, teacher), output_path)
+        create_json_file(add_student_record(student, teacher), output_path)
 
 
-def _add_student_record(student, teacher):
+def add_student_record(student, teacher):
     """Create student information record"""
 
     student_record = {
