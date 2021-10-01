@@ -1,34 +1,11 @@
-from os.path import isfile, getsize
 import dask.dataframe as dd
-import json
-
-teachers = dd.read_parquet("teachers.parquet", columns=["fname", "lname", "cid"])
-students = dd.read_csv("students.csv", sep="_")
+from studentsapp.studentsapp import create_student_directory
 
 
-for student in students.iterrows():
-    student = student[1]
-    teacher = teachers[teachers["cid"] == student["cid"]].compute()
+teachers_data = "data/teachers.parquet"
+students_data = "data/students.csv"
+teachers_df = dd.read_parquet(teachers_data, columns=["fname", "lname", "cid"])
+students_df = dd.read_csv(students_data, sep="_").head(5)
+students_directory = "data/students.json"
 
-    student_record = {
-        "firstName": student["fname"],
-        "lastName": student["lname"],
-        "classId": student["cid"],
-        "teacher": {
-            "firstName": teacher["fname"].values[0],
-            "lastName": teacher["lname"].values[0],
-        },
-    }
-
-    print(student_record)
-
-    if not isfile("data.json") or getsize("data.json") == 0:
-        with open("data.json", "w") as f:
-            f.write(json.dumps([student_record]))
-    else:
-        with open("data.json", "r+") as json_file:
-            data = json.load(json_file)
-
-            data.append(student_record)
-            with open("data.json", "w") as f:
-                f.write(json.dumps(data))
+create_student_directory(students_df, teachers_df)
