@@ -4,10 +4,11 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-pandas = "*"
 pyarrow = "*"
 pylint = "*"
 black = "*"
+json-stream = "*"
+dask = {extras = ["dataframe"], version = "*"}
 
 [dev-packages]
 
