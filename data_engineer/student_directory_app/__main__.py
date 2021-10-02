@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# ----------------------------------------------------------------------------
+# Created By  : Wilfred Morgan
+# version ='1.0'
+# license = 'MIT'
+# ---------------------------------------------------------------------------
+"""Generates student directory data.
+
+This package creates a student directory which contains student contact 
+information and their class enrollment.
+
+"""
+
 from studentsapp.studentsapp import create_student_directory
 from studentsapp.helpers import transform_input_files
 

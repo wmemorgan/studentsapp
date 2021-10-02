@@ -1,3 +1,15 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# ----------------------------------------------------------------------------
+# Created By  : Wilfred Morgan
+# version ='1.0'
+# license = 'MIT'
+# ---------------------------------------------------------------------------
+"""
+StudentsApp test suite.
+
+"""
+
 import os
 import dask.dataframe as dd
 import json
