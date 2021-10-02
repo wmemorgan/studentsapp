@@ -1,51 +1,25 @@
-from io import StringIO
 import os
-from studentsapp import studentsapp
-import pytest
 import dask.dataframe as dd
-import pandas as pd
 import json
-
-
-@pytest.fixture(scope="module")
-def student_df():
-
-    return dd.read_csv("tests/data/students.csv", sep="_").head(5)
-
-
-@pytest.fixture(scope="module")
-def teacher_df():
-    df = pd.DataFrame(
-        [
-            ["Jessa", "Gibbs", "08-2046381"],
-            ["Tate", "Weekley", "57-9105495"],
-            ["Trenna", "Chasney", "76-3364242"],
-            ["Rabbi", "McGuinness", "32-3782498"],
-            ["Amalle", "Toffetto", "50-4537323"],
-        ],
-        columns=["fname", "lname", "cid"],
-    )
-
-    return df
-    # return dd.read_table(df)
+from studentsapp import studentsapp
 
 
 def test_select_matching_record():
-    students_df = dd.read_csv("tests/data/students.csv", sep="_").head(1)
+    students_df = dd.read_csv("tests/data/students.csv", sep="_", sample_rows=1)
     teachers_df = dd.read_parquet(
         "tests/data/teachers.parquet", ["fname", "lname", "cid"]
     )
     student = [row for row in students_df.iterrows()][0][1]
 
     actual = studentsapp.select_matching_record(teachers_df, student, "cid")
-    print("\nactual match:\n", actual)
+
     assert actual["fname"].values[0] == "Jessa"
     assert actual["lname"].values[0] == "Gibbs"
     assert actual["cid"].values[0] == "08-2046381"
 
 
 def test_create_student_record():
-    students_df = dd.read_csv("tests/data/students.csv", sep="_").head(1)
+    students_df = dd.read_csv("tests/data/students.csv", sep="_", sample_rows=1)
     teachers_df = dd.read_parquet(
         "tests/data/teachers.parquet", ["fname", "lname", "cid"]
     )
