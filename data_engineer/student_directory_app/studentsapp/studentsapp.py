@@ -1,22 +1,34 @@
-from .helpers import create_json_file
+from .helpers import output_json_file, clean_up_file
 
 
-def create_student_directory(students, teachers, output_path):
-    """Generates student directory"""
+def create_student_directory(students_df, teachers_df, output_path):
+    """Create student directory data in json file format"""
 
-    for student in students.iterrows():
-        student = student[1]
-        teacher = teachers[teachers["cid"] == student["cid"]].compute()
+    # Prevent appending duplicate records
+    clean_up_file(output_path)
 
-        create_json_file(add_student_record(student, teacher), output_path)
+    students_df.apply(
+        lambda student: add_student_json_record(
+            student, teachers_df, output_path
+        ),
+        axis=1,
+    )
 
 
-def add_student_record(student, teacher):
-    """Create student information record"""
+def add_student_json_record(student, teachers_df, output_path):
+    teacher = select_matching_record(teachers_df, student, "cid")
+    student_record = create_student_record(student, teacher)
 
+    output_json_file(student_record, output_path)
+
+
+def create_student_record(student, teacher):
     student_record = {
         "firstName": student["fname"],
         "lastName": student["lname"],
+        "email": student["email"],
+        "ssn": student["ssn"],
+        "address": student["address"],
         "classId": student["cid"],
         "teacher": {
             "firstName": teacher["fname"].values[0],
@@ -25,3 +37,7 @@ def add_student_record(student, teacher):
     }
 
     return student_record
+
+
+def select_matching_record(df, linked_row, matching_col):
+    return df[df[matching_col] == linked_row[matching_col]].compute()
