@@ -7,8 +7,7 @@ import json
 def transform_input_files(
     students_file, teachers_files, sep=",", columns=None
 ):
-    # TODO: Remove filter before production
-    students_df = dd.read_csv(students_file, sep=sep).head(5)
+    students_df = dd.read_csv(students_file, sep=sep)
     teachers_df = dd.read_parquet(teachers_files, columns=columns)
 
     return (students_df, teachers_df)
