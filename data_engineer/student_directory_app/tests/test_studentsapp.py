@@ -5,7 +5,9 @@ from studentsapp import studentsapp
 
 
 def test_select_matching_record():
-    students_df = dd.read_csv("tests/data/students.csv", sep="_", sample_rows=1)
+    students_df = dd.read_csv(
+        "tests/data/students.csv", sep="_", sample_rows=1
+    )
     teachers_df = dd.read_parquet(
         "tests/data/teachers.parquet", ["fname", "lname", "cid"]
     )
@@ -19,7 +21,9 @@ def test_select_matching_record():
 
 
 def test_create_student_record():
-    students_df = dd.read_csv("tests/data/students.csv", sep="_", sample_rows=1)
+    students_df = dd.read_csv(
+        "tests/data/students.csv", sep="_", sample_rows=1
+    )
     teachers_df = dd.read_parquet(
         "tests/data/teachers.parquet", ["fname", "lname", "cid"]
     )
