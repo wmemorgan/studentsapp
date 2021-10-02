@@ -1,6 +1,5 @@
 from io import StringIO
-
-from dask.array.routines import result_type
+import os
 from studentsapp import studentsapp
 import pytest
 import dask.dataframe as dd
@@ -10,7 +9,7 @@ import pandas as pd
 @pytest.fixture(scope="module")
 def student_df():
 
-    return dd.read_csv("data/students.csv", sep="_").head(5)
+    return dd.read_csv("tests/data/students.csv", sep="_").head(5)
 
 
 @pytest.fixture(scope="module")
@@ -31,8 +30,10 @@ def teacher_df():
 
 
 def test_select_matching_record():
-    students_df = dd.read_csv("./data/students.csv", sep="_").head(1)
-    teachers_df = dd.read_parquet("./data/teachers.parquet", ["fname", "lname", "cid"])
+    students_df = dd.read_csv("tests/data/students.csv", sep="_").head(1)
+    teachers_df = dd.read_parquet(
+        "tests/data/teachers.parquet", ["fname", "lname", "cid"]
+    )
     student = [row for row in students_df.iterrows()][0][1]
 
     actual = studentsapp.select_matching_record(teachers_df, student, "cid")
@@ -44,8 +45,10 @@ def test_select_matching_record():
 
 def test_create_student_record():
 
-    students_df = dd.read_csv("./data/students.csv", sep="_").head(1)
-    teachers_df = dd.read_parquet("./data/teachers.parquet", ["fname", "lname", "cid"])
+    students_df = dd.read_csv("tests/data/students.csv", sep="_").head(1)
+    teachers_df = dd.read_parquet(
+        "tests/data/teachers.parquet", ["fname", "lname", "cid"]
+    )
     student = [row for row in students_df.iterrows()][0][1]
     teacher = teachers_df[teachers_df["cid"] == student["cid"]].compute()
 
@@ -53,3 +56,19 @@ def test_create_student_record():
 
     assert actual["firstName"] == "Dniren"
     assert actual["teacher"]["lastName"] == "Gibbs"
+
+
+def test_create_student_directory():
+    output_path = "tests/data/students.json"
+
+    if os.path.exists(output_path):
+        os.remove(output_path)
+
+    students_df = dd.read_csv("tests/data/students.csv", sep="_").head(5)
+    teachers_df = dd.read_parquet(
+        "tests/data/teachers.parquet", ["fname", "lname", "cid"]
+    )
+
+    studentsapp.create_student_directory(students_df, teachers_df, output_path)
+
+    assert os.path.exists(output_path)
