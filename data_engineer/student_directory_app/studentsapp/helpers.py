@@ -38,5 +38,5 @@ def output_json_file(record, output_path):
 
 
 def clean_up_file(output_path):
-    if exists:
+    if exists(output_path):
         remove(output_path)
