@@ -1,17 +1,20 @@
-from os.path import isfile, getsize
+from os import remove
+from os.path import isfile, getsize, exists
 import dask.dataframe as dd
 import json
 
 
-def transform_input_files(students_file, teachers_files, columns=None):
-    """Convert source files to dataframes"""
-    students_df = dd.read_csv(students_file, sep="_").head(5)
+def transform_input_files(
+    students_file, teachers_files, sep=",", columns=None
+):
+    # TODO: Remove filter before production
+    students_df = dd.read_csv(students_file, sep=sep).head(5)
     teachers_df = dd.read_parquet(teachers_files, columns=columns)
 
     return (students_df, teachers_df)
 
 
-def create_json_file(record, output_path):
+def output_json_file(record, output_path):
     """Create or append record to a json file"""
 
     if not isfile(output_path) or getsize(output_path) == 0:
@@ -24,3 +27,8 @@ def create_json_file(record, output_path):
             data.append(record)
             with open(output_path, "w") as f:
                 f.write(json.dumps(data))
+
+
+def clean_up_file(output_path):
+    if exists:
+        remove(output_path)
