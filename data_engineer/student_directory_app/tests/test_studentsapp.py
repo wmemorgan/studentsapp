@@ -4,6 +4,7 @@ from studentsapp import studentsapp
 import pytest
 import dask.dataframe as dd
 import pandas as pd
+import json
 
 
 @pytest.fixture(scope="module")
@@ -44,7 +45,6 @@ def test_select_matching_record():
 
 
 def test_create_student_record():
-
     students_df = dd.read_csv("tests/data/students.csv", sep="_").head(1)
     teachers_df = dd.read_parquet(
         "tests/data/teachers.parquet", ["fname", "lname", "cid"]
@@ -60,7 +60,6 @@ def test_create_student_record():
 
 def test_create_student_directory():
     output_path = "tests/data/students.json"
-
     if os.path.exists(output_path):
         os.remove(output_path)
 
@@ -72,3 +71,8 @@ def test_create_student_directory():
     studentsapp.create_student_directory(students_df, teachers_df, output_path)
 
     assert os.path.exists(output_path)
+    with open(output_path) as json_file:
+        actual_file = json.load(json_file)
+        assert len(actual_file) == 5
+
+    os.remove(output_path)
