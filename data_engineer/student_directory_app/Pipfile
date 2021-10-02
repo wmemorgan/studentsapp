@@ -9,6 +9,7 @@ pylint = "*"
 black = "*"
 json-stream = "*"
 dask = {extras = ["dataframe"], version = "*"}
+pytest = "*"
 
 [dev-packages]
 
