@@ -15,7 +15,7 @@ Matches student and teacher data to generate a student directory which includes 
 - [Python 3.8.12](https://www.python.org/downloads/release/python-3812/)
 
 ### Installation
-1. Clone this repo to your local machine from `https://github.com/wmemorgan/45432t43pojr`
+1. Clone this repo to your local machine from `https://github.com/wmemorgan/studentsapp.git`
 2. Install [Python 3.8.12](https://www.python.org/downloads/release/python-3812/)
 3. Open directory **source\studendsapp** in command line
 
