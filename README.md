@@ -66,4 +66,4 @@ The JSON file contains the following data fields:
 | **lastName** | string |
 
 ## License
-[MIT]()
+[MIT](https://github.com/wmemorgan/studentsapp/blob/main/LICENSE)
