@@ -1,15 +1,69 @@
-This repository has two seperate exercises depending on the role:
+# Student Directory Generator
+Module which generates student directory data.
 
-1. [Data Engineer](./data_engineer/)
-2. [Data Engineer Tech lead](./data_engineer_tech_lead)
+---
+## Features
+Matches student and teacher data to generate a student directory which includes assigned class instructors.
 
-The expectation is that the Python applications follow best practices.
 
-* All code is run through pylint and passes with a 10, **no exceptions**.
-* Notebooks will not be accepted. **no exceptions**. 
-* All code is organized into python modules.
-* ```__main__.py``` file with a main function is used as the entry point.
-* All code is organized into functions and classes.
-* Unit tests and Integration tests are done to a professional level.
-* A ```README.md``` should be created that explains how to run the application. 
-* code must include a requirements.txt file.
+## Technologies
+[Python 3.8.12](https://www.python.org/downloads/release/python-3812/)
+[Dask](https://dask.org/)
+
+## Getting Started
+### Prerequisites
+- [Python 3.8.12](https://www.python.org/downloads/release/python-3812/)
+
+### Installation
+1. Clone this repo to your local machine from `https://github.com/wmemorgan/45432t43pojr`
+2. Install [Python 3.8.12](https://www.python.org/downloads/release/python-3812/)
+3. Open directory **source\studendsapp** in command line
+
+#### Choose **ONE** of the installation options:
+
+<details>
+<summary>Install with pip</summary>
+
+- Execute `pip install -r requirements.txt` to install the project dependencies
+</details>
+
+<details>
+<summary>Install with pipenv (Virtual environments)</summary>
+  
+  1. Install [pipenv](https://pipenv.pypa.io/en/latest/) on your machine
+  2. Execute `pipenv install` to install the project dependencies
+</details>
+
+
+
+### Usage 
+1. Open directory **source\studendsapp** in command line
+2. Execute `python __main__.py` to run the program.
+
+## Output
+Script creates a file in the **data** directory named `students.json`.
+
+
+## Documentation
+The JSON file contains the following data fields:
+| Field | Type |
+| --- | --- |
+| **id** | integer |
+| **firstName** | string |
+| **lastName** | string |
+| **email** | string |
+| **ssn** | string |
+| **address** | string |
+| **classId** | string | 
+| **teacher** | object |
+
+
+### Teacher data fields:
+| Field | Type |
+| --- | --- |
+| **id** | integer |
+| **firstName** | string |
+| **lastName** | string |
+
+## License
+[MIT]()
