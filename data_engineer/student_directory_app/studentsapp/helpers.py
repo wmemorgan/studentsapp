@@ -9,8 +9,9 @@
 
 from os import remove
 from os.path import isfile, getsize, exists
-import dask.dataframe as dd
+import sys
 import json
+import dask.dataframe as dd
 
 
 def transform_input_files(
@@ -26,17 +27,33 @@ def transform_input_files(
 def output_json_file(record, output_path):
     """Create or append record to a json file"""
     if not isfile(output_path) or getsize(output_path) == 0:
-        with open(output_path, "w") as f:
-            f.write(json.dumps([record]))
+        with open(output_path, "w") as file_output:
+            file_output.write(json.dumps([record]))
     else:
         with open(output_path, "r+") as json_file:
             data = json.load(json_file)
 
             data.append(record)
-            with open(output_path, "w") as f:
-                f.write(json.dumps(data))
+            with open(output_path, "w") as file_output:
+                file_output.write(json.dumps(data))
 
 
-def clean_up_file(output_path):
+def verify_file_delete(output_path):
+    """Verify file deletion"""
+    if exists(output_path):
+        print(
+            f"The {output_path} file exists. Do you want to overwrite the file? (Y/n):"
+        )
+        user_response = input().lower()
+        if user_response == "y":
+            delete_file(output_path)
+            print("Creating new file...")
+        else:
+            print("Program exit.")
+            sys.exit()
+
+
+def delete_file(output_path):
+    """Remove existing files to avoid data corruption or duplication"""
     if exists(output_path):
         remove(output_path)
