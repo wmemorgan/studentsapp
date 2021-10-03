@@ -11,19 +11,23 @@ StudentsApp test suite.
 """
 
 import os
-import dask.dataframe as dd
 import json
+import dask.dataframe as dd
 from studentsapp import studentsapp
 
 
 def test_select_matching_record():
+    """
+    Verify the function assigns the correct teacher
+    to the student.
+    """
     students_df = dd.read_csv(
         "tests/data/students.csv", sep="_", sample_rows=1
     )
     teachers_df = dd.read_parquet(
         "tests/data/teachers.parquet", ["fname", "lname", "cid"]
     )
-    student = [row for row in students_df.iterrows()][0][1]
+    student = list(students_df.iterrows())[0][1]
 
     actual = studentsapp.select_matching_record(teachers_df, student, "cid")
 
@@ -33,13 +37,14 @@ def test_select_matching_record():
 
 
 def test_create_student_record():
+    """Verify the function creates a valid student record."""
     students_df = dd.read_csv(
         "tests/data/students.csv", sep="_", sample_rows=1
     )
     teachers_df = dd.read_parquet(
         "tests/data/teachers.parquet", ["fname", "lname", "cid"]
     )
-    student = [row for row in students_df.iterrows()][0][1]
+    student = list(students_df.iterrows())[0][1]
     teacher = teachers_df[teachers_df["cid"] == student["cid"]].compute()
 
     actual = studentsapp.create_student_record(student, teacher)
@@ -49,6 +54,7 @@ def test_create_student_record():
 
 
 def test_create_student_directory():
+    """Test the entire student directory creation workflow."""
     output_path = "tests/data/students.json"
     if os.path.exists(output_path):
         os.remove(output_path)
