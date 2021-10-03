@@ -7,7 +7,7 @@
 # ---------------------------------------------------------------------------
 """Generates student directory data.
 
-This package creates a student directory which contains student contact 
+This package creates a student directory which contains student contact
 information and their class enrollment.
 
 """
@@ -17,6 +17,7 @@ from studentsapp.helpers import transform_input_files
 
 
 def main():
+    """Run application"""
     students_df, teachers_df = transform_input_files(
         "data/students.csv",
         "data/teachers.parquet",
