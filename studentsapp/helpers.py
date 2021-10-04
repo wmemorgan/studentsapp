@@ -46,14 +46,10 @@ def verify_file_delete(output_path):
         )
         user_response = input().lower()
         if user_response == "y":
-            delete_file(output_path)
+            remove(output_path)
             print("Creating new file...")
         else:
             print("Program exit.")
             sys.exit()
-
-
-def delete_file(output_path):
-    """Remove existing files to avoid data corruption or duplication"""
-    if exists(output_path):
-        remove(output_path)
+    else:
+        print("Creating new file...")
