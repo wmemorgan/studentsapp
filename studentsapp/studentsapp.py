@@ -12,7 +12,7 @@ to generate a JSON file.
 
 """
 
-from .helpers import output_json_file, verify_file_delete, delete_file
+from .helpers import output_json_file, verify_file_delete
 
 
 def create_student_directory(students_df, teachers_df, output_path):
@@ -20,12 +20,9 @@ def create_student_directory(students_df, teachers_df, output_path):
     verify_file_delete(output_path)  # Prevent appending duplicate records
 
     for student in students_df.iterrows():
-        try:
-            add_student_json_record(student[1], teachers_df, output_path)
-        except ValueError:
-            print("Error adding student record.")
+        add_student_json_record(student[1], teachers_df, output_path)
 
-    print(f"Student directory created at: {output_path}")
+    print(f"Student directory successfully created at: {output_path}")
 
 
 def add_student_json_record(student, teachers_df, output_path):
@@ -34,6 +31,13 @@ def add_student_json_record(student, teachers_df, output_path):
     student_record = create_student_record(student, teacher)
 
     output_json_file(student_record, output_path)
+
+
+def select_matching_record(dataframe, linked_row, matching_col):
+    """Return dataframe row based on matching column name"""
+    return dataframe[
+        dataframe[matching_col] == linked_row[matching_col]
+    ].compute()
 
 
 def create_student_record(student, teacher):
@@ -53,10 +57,3 @@ def create_student_record(student, teacher):
     }
 
     return student_record
-
-
-def select_matching_record(dataframe, linked_row, matching_col):
-    """Return dataframe row based on matching column name"""
-    return dataframe[
-        dataframe[matching_col] == linked_row[matching_col]
-    ].compute()
